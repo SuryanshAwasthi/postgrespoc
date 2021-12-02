@@ -5,8 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.getarrays.userservice.domain.MessageRequest;
 import io.getarrays.userservice.domain.Role;
-import io.getarrays.userservice.domain.User;
+//import io.getarrays.userservice.domain.User;
+import io.getarrays.userservice.domain.User1;
 import io.getarrays.userservice.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -35,19 +37,33 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserResource {
+
+   // UserService userservice;
     private final UserService userService;
+    @GetMapping("/")
+    public String firstfun()
+    {
+        return "lo ye to sabke liye hai";
+    }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>>getUsers() {
+    public ResponseEntity<List<User1>>getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @PostMapping("/user/save")
-    public ResponseEntity<User>saveUser(@RequestBody User user) {
+    public ResponseEntity<User1>saveUser(@RequestBody User1 user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
+    @PostMapping("/message")
+    public User1 message(@RequestBody MessageRequest msgreq)
+    {
+        User1 user=userService.getUser(msgreq.getUsername());
+        user.streamvar=""+msgreq.getMessage();
+        return userService.saveUser(user);
+    }
     @PostMapping("/role/save")
     public ResponseEntity<Role>saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
@@ -70,7 +86,7 @@ public class UserResource {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String username = decodedJWT.getSubject();
-                User user = userService.getUser(username);
+                User1 user = userService.getUser(username);
                 String access_token = JWT.create()
                         .withSubject(user.getUsername())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))

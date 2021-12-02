@@ -3,6 +3,7 @@ package io.getarrays.userservice.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.getarrays.userservice.domain.JwtRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,8 +40,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        ObjectMapper mapper = new ObjectMapper();
+        JwtRequest jwtrequest= new JwtRequest();
+
+        try {
+            jwtrequest = mapper.readValue(request.getInputStream(), JwtRequest.class);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        String username=jwtrequest.getUsername();
+        String password= jwtrequest.getPassword();
+        // String username = request.getParameter("username");
+        //String password = request.getParameter("password");
         log.info("Username is: {}", username); log.info("Password is: {}", password);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(authenticationToken);

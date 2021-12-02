@@ -1,7 +1,8 @@
 package io.getarrays.userservice;
 
 import io.getarrays.userservice.domain.Role;
-import io.getarrays.userservice.domain.User;
+//import io.getarrays.userservice.domain.User;
+import io.getarrays.userservice.domain.User1;
 import io.getarrays.userservice.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -32,10 +33,10 @@ public class UserServiceApplication {
 			userService.saveRole(new Role(null, "ROLE_ADMIN"));
 			userService.saveRole(new Role(null, "ROLE_SUPER_ADMIN"));
 
-			userService.saveUser(new User(null, "John Travolta", "john", "1234", new ArrayList<>()));
-			userService.saveUser(new User(null, "Will Smith", "will", "1234", new ArrayList<>()));
-			userService.saveUser(new User(null, "Jim Carry", "jim", "1234", new ArrayList<>()));
-			userService.saveUser(new User(null, "Arnold Schwarzenegger", "arnold", "1234", new ArrayList<>()));
+			userService.saveUser(new User1(null, "John Travolta", "john", "1234","", new ArrayList<>()));
+			userService.saveUser(new User1(null, "Will Smith", "will", "1234","", new ArrayList<>()));
+			userService.saveUser(new User1(null, "Jim Carry", "jim", "1234","", new ArrayList<>()));
+			userService.saveUser(new User1(null, "Arnold Schwarzenegger", "arnold", "1234","", new ArrayList<>()));
 
 			userService.addRoleToUser("john", "ROLE_USER");
 			userService.addRoleToUser("will", "ROLE_MANAGER");
